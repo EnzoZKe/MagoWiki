@@ -36,6 +36,8 @@ def login_usuario():
         cursor = conn.cursor(cursor_factory=RealDictCursor)
         cursor.execute("SELECT SENHA, EMAIL, NOME, PFP, USUARIO_TIPO, ID_USUARIO FROM USUARIOS WHERE EMAIL = %s", (EMAIL,))
         senhaBanco = cursor.fetchone()
+
+        print(senhaBanco)
         
         if senhaBanco and checar_senha(senhaBanco['SENHA'], SENHA):
             session['usuario'] = {
