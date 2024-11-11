@@ -1,12 +1,13 @@
 from flask import Blueprint, request, render_template, redirect, url_for, session
 from conexao import criar_conexao, fechar_conexao
+from psycopg2.extras import RealDictCursor
 
 favoritos_bp = Blueprint('favoritos', __name__)
 
 @favoritos_bp.route('/listar_favoritos', methods=['GET'])
 def listar_favoritos():
     conn = criar_conexao()
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
 
     ID_USUARIO = session.get('usuario')['id_usuario']
 
@@ -35,7 +36,7 @@ def favoritar():
         return redirect(url_for('usuarios.login_usuario'))
 
     conn = criar_conexao()
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
 
     ID_USUARIO = session.get('usuario')['id_usuario']
     ID_MAGIA = request.form['ID_MAGIA']
@@ -67,7 +68,7 @@ def favoritar():
 @favoritos_bp.route('/desfavoritar', methods=['POST'])
 def desfavoritar():
     conn = criar_conexao()
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
 
     ID_USUARIO = session.get('usuario')['id_usuario']
     ID_MAGIA = request.form['ID_MAGIA']
