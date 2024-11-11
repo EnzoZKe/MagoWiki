@@ -40,7 +40,7 @@ def login_usuario():
         cursor.close()
         fechar_conexao(conn)
         
-        if senhaBanco and 'SENHA' in senhaBanco and checar_senha(senhaBanco['SENHA'], SENHA):
+        if senhaBanco and checar_senha(senhaBanco['SENHA'], SENHA):
             session['usuario'] = {
                 'id_usuario': senhaBanco['ID_USUARIO'],
                 'email': senhaBanco['EMAIL'],
@@ -48,9 +48,10 @@ def login_usuario():
                 'pfp': senhaBanco['PFP'],
                 'usuario_tipo': senhaBanco['USUARIO_TIPO']
             }
+            
             return redirect(url_for('home'))
         else:
-            return render_template('login.html', mensagem='Login Incorreto')
+            return render_template('login.html', mensagem = 'Login Incorreto')
             
     return render_template('login.html')
         
