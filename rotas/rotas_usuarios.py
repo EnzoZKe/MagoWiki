@@ -39,13 +39,13 @@ def login_usuario():
 
         print(senhaBanco)
         
-        if senhaBanco and checar_senha(senhaBanco['SENHA'], SENHA):
+        if senhaBanco and checar_senha(senhaBanco['senha'], SENHA):
             session['usuario'] = {
-                'id_usuario': senhaBanco['ID_USUARIO'],
-                'email': senhaBanco['EMAIL'],
-                'nome': senhaBanco['NOME'],
-                'pfp': senhaBanco['PFP'],
-                'usuario_tipo': senhaBanco['USUARIO_TIPO']
+                'id_usuario': senhaBanco['id_usuario'],
+                'email': senhaBanco['email'],
+                'nome': senhaBanco['nome'],
+                'pfp': senhaBanco['pfp'],
+                'usuario_tipo': senhaBanco['usuario_tipo']
             }
             
             return redirect(url_for('home'))
