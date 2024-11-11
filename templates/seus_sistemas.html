@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MagoWiki</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+    <header class="itens-header">
+        <div>
+            <div class="S-d">
+                <img src="../static/logo.png" alt="Logo do site">
+                <h1 class="logo">MAGOWIKI</h1>
+            </div>
+            <nav class="nav-links">
+                {% if 'usuario' not in session %}
+                <a href="{{ url_for('usuarios.login_usuario') }}" class="btn-entrar">Entrar</a>
+                {% else %}
+                <a href="{{ url_for('home') }}" class="btn-entrar">Home</a>
+                <a href="{{ url_for('sistemas.listar_sistema') }}" class="btn-entrar">Todos os Sistemas</a>
+                <a href="{{ url_for('sistemas.criar_sistema') }}" class="btn-entrar">Adicionar Sistema</a>
+                <a href="{{ url_for('usuarios.logout') }}" class="btn-entrar">Sair</a>
+                {% endif %}
+            </nav>
+        </div>
+        <div style="display: flex; align-items: center;">
+            {% if 'usuario' not in session %}
+
+            {% else %}
+            <a href="/usuarios/perfil" class="perfil">
+                <p><strong>{{session['usuario']['nome']}}</strong></p>
+                <img src="{{session['usuario']['pfp']}}" alt="" style="border-radius: 100%; width: 65px; height: 65px;">
+            </a>
+            {% endif %}
+        </div>
+    </header>
+    <main class="main">
+
+        <div class="textos">
+            {% if 'usuario' in session %}
+            <h2>Seus sistemas de RPG</h2>
+            <ul class="table">
+                {% if sistemas %}
+                {% for sistema in sistemas %}
+
+                <li style="display: flex; align-items: center;">
+                    <h3>{{ sistema.nome_sistema }}</h3>
+                    <div style="display: flex;">
+                        <a href="{{ url_for('sistemas.excluir_sistema', id=sistema.id_sistema) }}"><button
+                                class="btn-table">Excluir</button></a>
+                    </div>
+                </li>
+
+                {% endfor %}
+                {% else %}
+                <h3>Você não tem nenhum sistema cadastrado</h3>
+                {% endif %}
+            </ul>
+            {% else %}
+            <p>por favor, <a href="{{ url_for('usuarios.login_usuario') }}"> faça login</a> para ver os sistemas</p>
+            {% endif %}
+        </div>

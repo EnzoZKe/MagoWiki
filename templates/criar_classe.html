@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar Classe</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+    <header class="itens-header">
+        <div>
+            <div class="S-d">
+                <img src="../static//logo.png" alt="Logo do site">
+                <h1 class="logo">MAGOWIKI</h1>
+            </div>
+            <nav class="nav-links">
+                {% if 'usuario' not in session %}
+                <a href="{{ url_for('usuarios.login_usuario') }}" class="btn-entrar">Entrar</a>
+                {% else %}
+                <a href="{{ url_for('home') }}" class="btn-entrar">Home</a>
+                <a href="{{ url_for('classes.listar_classe') }}" class="btn-entrar">Todas as Classes</a>
+                <a href="{{ url_for('classes.listar_suas_classes') }}" class="btn-entrar">Suas Classes</a>
+                {% endif %}
+            </nav>
+
+        </div>
+        <div style="display: flex; align-items: center;">
+            {% if 'usuario' not in session %}
+
+            {% else %}
+            <a href="/usuarios/perfil" class="perfil">
+                <p><strong>{{session['usuario']['nome']}}</strong></p>
+                <img src="{{session['usuario']['pfp']}}" alt="" style="border-radius: 100%; width: 65px; height: 65px;">
+            </a>
+            {% endif %}
+        </div>
+    </header>
+    <main class="main">
+        <div>
+            <h2 style="text-align: center;">Adicionar nova classe</h2>
+            <div  style="display: flex; flex-direction: column; justify-content: center; margin-top: 20px;">
+                <form action="{{ url_for('classes.criar_classe')}}" method="post"
+                    style="display: flex; flex-direction: column; align-items: center">
+                    <div class="forms-inputs">
+                        <label for="">Nome da classe</label>
+                        <input type="text" id="nome_classe" name="NOME_CLASSE" class="inputs-self" required>
+                    </div>
+                    <div class="forms-inputs">
+                        <label for="">Descrição da classe</label>
+                        <input type="text" id="descricao_classe" name="DESCRICAO_CLASSE" class="inputs-self" required
+                            placeholder="insiria um resumo da classe">
+                    </div>
+                    <button type="submit" class="btn-entrar">Adicionar</button>
+                </form>
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>

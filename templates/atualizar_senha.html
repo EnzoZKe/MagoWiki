@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MagoWiki</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" />
+</head>
+
+<body>
+    <header class="itens-header">
+        <div>
+            <div class="S-d">
+                <img src="../static/logo.png" alt="Logo do site">
+                <h1 class="logo">MAGOWIKI</h1>
+            </div>
+            <nav class="nav-links">
+                {% if 'usuario' not in session %}
+                <a href="{{ url_for('usuarios.login_usuario') }}" class="btn-entrar">Entrar</a>
+                {% else %}
+                <a href="{{ url_for('magias.listar_suas_magias') }}" class="btn-entrar">Minhas magias</a>
+                <a href="{{ url_for('magias.criar_magia') }}" class="btn-entrar">Criar magia</a>
+                {% if session['usuario']['usuario_tipo'] == 'admin' %}
+                <a href="{{ url_for('sistemas.listar_sistema') }}" class="btn-entrar">Sistemas</a>
+                <a href="{{ url_for('classes.listar_classe') }}" class="btn-entrar">Classes</a>
+                {% endif %}
+                <!-- COMO FAZ PRA POR O USUARIO AQUI -->
+                {% endif %}
+            </nav>
+        </div>
+
+    </header>
+    <main  class="main" style="display: flex; justify-content: center; ">
+        <div  class="S-d" style="justify-content: center; padding: 0; flex-direction: column;">
+    
+            {% if 'usuario' in session %}
+            <form action="{{ url_for('usuarios.atualizar_senha') }}" method="POST">
+                <div>
+                    <label for="senha_atual">Senha Atual</label>
+                    <input type="password" name="SENHA" required>
+                </div>
+            
+                <div>
+                    <label for="nova_senha">Nova Senha</label>
+                    <input type="password" name="NOVA_SENHA" required>
+                </div>
+            
+                <div>
+                    <label for="confirmar_senha">Confirmar Nova Senha</label>
+                    <input type="password" name="CONFIRMAR_SENHA" required>
+                </div>
+            
+                <div>
+                    <button type="submit">Atualizar Senha</button>
+                </div>
+            
+                {% if mensagem %}
+                    <p>{{ mensagem }}</p>
+                {% endif %}
+            </form>
+            {% else %}
+                <p>!!<a href="{{url_for('usuarios.criar_usuario')}}">CRIE UMA CONTA</a> OU <a href="{{url_for('usuarios.login_usuario')}}">FAÇA LOGIN</a> PARA ENTRAR!!</p>
+            {% endif %}
+            
+    </main>
+</body>

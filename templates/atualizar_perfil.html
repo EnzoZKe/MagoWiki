@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MagoWiki</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" />
+</head>
+
+<body>
+    <header class="itens-header">
+        <div>
+            <div class="S-d">
+                <img src="../static/logo.png" alt="Logo do site">
+                <h1 class="logo">MAGOWIKI</h1>
+            </div>
+            <nav class="nav-links">
+                {% if 'usuario' not in session %}
+                <a href="{{ url_for('usuarios.login_usuario') }}" class="btn-entrar">Entrar</a>
+                {% else %}
+                <a href="{{ url_for('home') }}" class="btn-entrar">Home</a>
+                <a href="{{ url_for('magias.listar_suas_magias') }}" class="btn-entrar">Minhas magias</a>
+                <a href="{{ url_for('magias.criar_magia') }}" class="btn-entrar">Criar magia</a>
+                {% if session['usuario']['usuario_tipo'] == 'admin' %}
+                <a href="{{ url_for('sistemas.listar_sistema') }}" class="btn-entrar">Sistemas</a>
+                <a href="{{ url_for('classes.listar_classe') }}" class="btn-entrar">Classes</a>
+                {% endif %}
+                <!-- COMO FAZ PRA POR O USUARIO AQUI -->
+                {% endif %}
+            </nav>
+        </div>
+
+    </header>
+    <main  class="main" style="display: flex; justify-content: center; ">
+        <div  class="S-d" style="justify-content: center; padding: 0; flex-direction: column;">
+            <h2 style="text-align: center;margin-bottom: 20px; display: flex; ">Seu perfil</h2>
+            <h3>Foto de Perfil</h3>
+            <img src="{{usuario.PFP}}" alt="" style="width: 200px; height: 200px; border-radius: 100%; margin-top: 10px; margin-bottom: 10px;">
+            
+            {% if 'usuario' in session %}
+                <form action="{{url_for('usuarios.atualizar_perfil')}}" method="POST" style="display: flex; flex-direction: column;align-items: center;">
+                    <div>
+                        <label for="nome">Nome de usuario</label>
+                        <input type="text" name="NOME" value="{{usuario.nome}}" id="nome" required class="inputs-self">
+                    </div>
+            
+                    <div>
+                        <label for="email">Email</label>
+                        <input type="email" name="EMAIL" value="{{usuario.email}}" id="email" required class="inputs-self">
+                    </div>
+            
+                    <div>
+                        <label for="pfp">Foto de perfil</label>
+                        <input type="text" name="PFP" value="{{usuario.PFP}}" id="pfp" class="inputs-self">
+                    </div>
+            
+                    <button class="btn-entrar" type="submit">Atualizar informações</button>
+                </form>
+            {% else %}
+                <p>!!<a href="{{url_for('usuarios.criar_usuario')}}">CRIE UMA CONTA</a> OU <a href="{{url_for('usuarios.login_usuario')}}">FAÇA LOGIN</a> PARA ENTRAR!!</p>
+            {% endif %}
+            
+    </main>
+</body>

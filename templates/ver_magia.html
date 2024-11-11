@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ver magia</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+    <header class="itens-header">
+        <div>
+            <div class="S-d">
+                <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo do site">
+                <h1 class="logo">MAGOWIKI</h1>
+            </div>
+            <nav class="nav-links">
+                {% if 'usuario' not in session %}
+                <a href="{{ url_for('usuarios.login_usuario') }}" class="btn-entrar">Entrar</a>
+                {% else %}
+                <a href="{{ url_for('home') }}" class="btn-entrar">Home</a>
+                <a href="{{ url_for('magias.listar_suas_magias') }}" class="btn-entrar">Minhas magias</a>
+                <a href="{{ url_for('magias.criar_magia') }}" class="btn-entrar">Criar magia</a>
+                <a href="{{url_for('sistemas.listar_sistema')}}" class="btn-entrar">Sistemas</a>
+                <a href="{{url_for('classes.listar_classe')}}" class="btn-entrar">Classes</a>
+                {% endif %}
+            </nav>
+        </div>
+        <div style="display: flex; align-items: center;">
+            {% if 'usuario' not in session %}
+
+            {% else %}
+            <a href="/usuarios/perfil" class="perfil">
+                <p><strong>{{session['usuario']['nome']}}</strong></p>
+                <img src="{{session['usuario']['pfp']}}" alt="" style="border-radius: 100%; width: 65px; height: 65px;">
+            </a>
+            {% endif %}
+        </div>
+    </header>
+    <main class="main" style="display: flex; justify-content: center;">
+        <div class="S-d" style="justify-content: center; padding: 0;">
+            <ul>
+                <li class="table03">
+                    <h2 style="text-align: center; margin-bottom: 20px;">{{ magia.nome_magia }}</h2>
+                    <img src="{{ magia.imagem }}" alt="" class="table-img" style="width: 400px; height: 300px; margin-bottom: 30px;">
+                    <p style="margin-bottom: 10px;"><strong>Nome do sistema de RPG:</strong> {{ magia.nome_sistema }}</p>
+                    <p style="margin-bottom: 10px;"><strong>Classe que pode usar: </strong>{{ magia.nome_classe }}</p>
+                    <p style="margin-bottom: 10px;"><strong>Alcance: </strong>{{ magia.alcance }}</p>
+                    <p style="margin-bottom: 10px;"><strong>Nivel para uso: </strong>{{ magia.nivel_uso }}</p>
+                    <p style="margin-bottom: 10px;"><strong>Duração da magia: </strong>{{ magia.duracao }}</p>
+                    <p style="margin-bottom: 10px;"><strong>Tempo para comjuração: </strong>{{ magia.tempo_conjuracao }}</p>
+                    <p style="margin-bottom: 10px;"><strong>Descrição: </strong>{{ magia.descricao }}</p>
+                    <h4>Cadastrado por: {{ magia.nome }}</h4>
+                </li>
+            </ul>
+        </div>
+    </main>
+</body>
+
+</html>

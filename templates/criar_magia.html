@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adicionar Magia</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+    <header class="itens-header">
+        <div>
+            <div class="S-d">
+                <img src="../static/logo.png" alt="Logo do site">
+                <h1 class="logo">MAGOWIKI</h1>
+            </div>
+            <nav class="nav-links">
+                {% if 'usuario' not in session %}
+                <a href="{{ url_for('usuarios.login_usuario') }}" class="btn-entrar">Entrar</a>
+                {% else %}
+                
+                <a href="{{ url_for('home') }}" class="btn-entrar">Home</a>
+                <a href="{{url_for('magias.listar_suas_magias')}}" class="btn-entrar">Minhas magias</a>
+                <a href="{{url_for('magias.listar_magia')}}" class="btn-entrar">Todas as magias</a>
+                {% endif %}
+            </nav>
+        </div>
+        <div style="display: flex; align-items: center;">
+            {% if 'usuario' not in session %}
+
+            {% else %}
+            <a href="/usuarios/perfil" class="perfil">
+                <p><strong>{{session['usuario']['nome']}}</strong></p>
+                <img src="{{session['usuario']['pfp']}}" alt="" style="border-radius: 100%; width: 65px; height: 65px;">
+            </a>
+            {% endif %}
+        </div>
+    </header>
+    <main class="main">
+        <div>
+            <h2 style="text-align: center;">Adicionar magia</h2>
+            <div style="display: flex; justify-content: center;">
+
+                <form action="{{ url_for('magias.criar_magia')}}" method="post"
+                    style="display: flex; flex-direction: column; align-items: center">
+                    <div class="forms-inputs">
+                        <label for="">Nome da magia</label>
+                        <input type="text" id="nome_magia" name="NOME_MAGIA" required class="inputs-self">
+                    </div>
+                    <div class="forms-inputs">
+                        <label for="">Selecione uma classe</label>
+                        <select name="CLASSE" id="classe" class="inputs-self">
+                            <option value="">selecione uma classe</option>
+                            {% for classe in classes %}
+                            <option value="{{ classe.id_classe }}">{{classe.nome_classe}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="forms-inputs">
+                        <label for="">Alcance</label>
+                        <input type="text" id="alcance" name="ALCANCE" required class="inputs-self">
+                    </div>
+
+                    <div class="forms-inputs">
+                        <label for="">Nome do sistema</label>
+                        <select name="SISTEMA" id="sistema" class="inputs-self">
+                            <option value="">selecione um sistema</option>
+                            {% for sistema in sistemas %}
+                            <option value="{{ sistema.id_sistema }}">{{sistema.nome_sistema}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="forms-inputs">
+                        <label for="">Nivel de uso</label>
+                        <input type="text" id="nivel" name="NIVEL" required class="inputs-self">
+                    </div>
+
+                    <div class="forms-inputs">
+                        <label for="">Duração de uso</label>
+                        <input type="text" id="duracao" name="DURACAO" required class="inputs-self">
+                    </div>
+
+                    <div class="forms-inputs">
+                        <label for="">Tempo para conjuração</label>
+                        <input type="text" id="tempo_conjuracao" name="TEMPO_CONJURACAO" required class="inputs-self">
+                    </div>
+
+                    <div class="forms-inputs">
+                        <label for="">Imagem</label>
+                        <input type="text" id="imagem" name="IMAGEM" required class="inputs-self">
+                    </div>
+                    <div class="forms-inputs">
+                        <label for="">Descrição</label>
+                        <textarea type="text" id="descricao" name="DESCRICAO" required class="input-select"></textarea>
+                    </div>
+                    <button type="submit" class="btn-entrar">Cadastrar</button>
+                </form>
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classes</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+    <header class="itens-header">
+        <div>
+            <div class="S-d">
+                <img src="../static//logo.png" alt="Logo do site">
+                <h1 class="logo">MAGOWIKI</h1>
+            </div>
+            <nav class="nav-links">
+                {% if 'usuario' not in session %}
+                <a href="{{ url_for('usuarios.login_usuario') }}" class="btn-entrar">Entrar</a>
+                {% else %}
+                <a href="{{ url_for('home') }}" class="btn-entrar">Home</a>
+                {% if session['usuario']['usuario_tipo'] == 'admin' %}
+                <a href="{{ url_for('classes.criar_classe') }}" class="btn-entrar">Adicionar Classe</a>
+                <a href="{{ url_for('classes.listar_suas_classes') }}" class="btn-entrar">Suas Classes</a>
+                {% endif %}
+                {% endif %}
+            </nav>
+        </div>
+        <div style="display: flex; align-items: center;">
+            {% if 'usuario' not in session %}
+
+            {% else %}
+            <a href="/usuarios/perfil" class="perfil">
+                <p><strong>{{session['usuario']['nome']}}</strong></p>
+                <img src="{{session['usuario']['pfp']}}" alt="" style="border-radius: 100%; width: 65px; height: 65px;">
+            </a>
+            {% endif %}
+        </div>
+    </header>
+    <main class="main" style="align-items: center;">
+        {% if 'usuario' in session %}
+        <div class="pesquisa">
+            <form action="{{ url_for('classes.listar_classe') }}">
+                <label for="">Pesquisar:</label>
+                <input type="text" name="PESQUISAR" style="color: rgb(245, 235, 237);" 
+                    placeholder="Insira nome da classe..." class="forms-box">
+                <button type="submit" class="btn-pesq">Pesquisar</button>
+            </form>
+        </div>
+        <div class="table03">
+
+            <h2 style="align-items: center;">Classes do site</h2>
+            <ul style=" list-style: none">
+                {% for classe in classes %}
+                <li>
+                    <h3>{{ classe.nome_classe }}</h3>
+                    <p>Descrição: {{ classe.descricao_classe }}</p>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p>por favor, <a href="{{ url_for('usuarios.login_usuario') }}"> faça login</a> para ver todas as magias</p>
+            {% endif %}
+            <div>
+    </main>
+</body>
+
+</html>

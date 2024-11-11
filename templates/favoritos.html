@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MagoWiki</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" />
+</head>
+
+<body>
+    <header class="itens-header">
+        <div>
+            <div class="S-d">
+                <img src="../static/logo.png" alt="Logo do site">
+                <h1 class="logo">MAGOWIKI</h1>
+            </div>
+            <nav class="nav-links">
+                {% if 'usuario' not in session %}
+                <a href="{{ url_for('usuarios.login_usuario') }}" class="btn-entrar">Entrar</a>
+                {% else %}
+                <a href="{{url_for('home')}}" class="btn-entrar">Home</a>
+                <a href="{{ url_for('magias.listar_suas_magias') }}" class="btn-entrar">Minhas magias</a>
+                <a href="{{ url_for('magias.criar_magia') }}" class="btn-entrar">Criar magia</a>
+                {% if session['usuario']['usuario_tipo'] == 'admin' %}
+                <a href="{{ url_for('sistemas.listar_sistema') }}" class="btn-entrar">Sistemas</a>
+                <a href="{{ url_for('classes.listar_classe') }}" class="btn-entrar">Classes</a>
+                {% endif %}
+                <a href="{{ url_for('usuarios.logout') }}" class="btn-entrar">Sair</a>
+                <!-- COMO FAZ PRA POR O USUARIO AQUI -->
+                {% endif %}
+            </nav>
+        </div>
+
+    </header>
+    <main class="main">
+
+        <h2 style="text-align: center;">FAVORITOS</h2>
+        {%if favoritos%}
+        <div style="display: flex; flex-direction: row; flex-wrap: wrap; justify-content: center;">
+            {% for favorito in favoritos %}
+            <div style="margin-bottom: 20px;">
+                <ul style="list-style-type: none; padding: 0; margin: 0;">
+                    <li>
+                        <div class="table">
+                            <div>
+                                <h2>{{ favorito.nome_magia }}</h2>
+                            </div>
+                            <div class="foto">
+                                <img src="{{ favorito.imagem }}" alt="foto da magia" style="width: 150px; height: 150px;">
+                            </div>
+        
+                            <div>
+                                <p>Nível para uso: {{ favorito.nivel_uso }}</p>
+                                <p>Classe que pode usar: {{ favorito.nome_classe }}</p>
+                                <p>Sistema: {{ favorito.nome_sistema }}</p>
+                                <div style="display: flex; gap: 10px; margin-top: 10px;">
+        
+                                    <a href="{{ url_for('magias.ver_magia', id=favorito.id_magia) }}">
+                                        <button class="btn-table">Ver</button>
+                                    </a>
+        
+                                    <form action="{{ url_for('favoritos.desfavoritar') }}" method="POST">
+                                        <input type="hidden" name="ID_MAGIA" value="{{ favorito.id_magia }}">
+                                        <button type="submit" class="btn-table">Remover</button>
+                                    </form>
+        
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            {% endfor %}
+        </div>
+        
+        
+            {% else %}
+
+            <h3 style="text-align: center; margin-bottom: 20px;">Voce ainda não tem favoritos</h3>
+
+
+            {% endif %}
+        </div>
+        </div>
+    </main>
+</body>

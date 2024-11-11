@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MagoWiki</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+    <header class="itens-header">
+        <div>
+            <div class="S-d">
+                <img src="../static//logo.png" alt="Logo do site">
+                <h1 class="logo">MAGOWIKI</h1>
+            </div>
+            <nav class="nav-links">
+                {% if 'usuario' not in session %}
+                <a href="{{ url_for('usuarios.login_usuario') }}" class="btn-entrar">Entrar</a>
+                {% else %}
+                <a href="{{ url_for('home') }}" class="btn-entrar">Home</a>
+                <a href="{{ url_for('sistemas.criar_sistema') }}" class="btn-entrar">Adicionar Sistema</a>
+                <a href="{{ url_for('sistemas.listar_seus_sistemas') }}" class="btn-entrar">Seus Sistema</a>              
+                {% endif %}
+            </nav>
+        </div>
+        <div style="display: flex; align-items: center;">
+            {% if 'usuario' not in session %}
+
+            {% else %}
+            <a href="/usuarios/perfil" class="perfil">
+                <p><strong>{{session['usuario']['nome']}}</strong></p>
+                <img src="{{session['usuario']['pfp']}}" alt="" style="border-radius: 100%; width: 65px; height: 65px;">
+            </a>
+            {% endif %}
+        </div>
+    </header>
+
+    <main class="main">
+        <div>
+            <h2 style="text-align: center; margin-bottom: 20px;">Sistemas disponiveis</h2>
+            {% if 'usuario' in session %}
+            {% for sistema in sistemas %}
+            <li>
+                <div class="textos">
+                    <h3>{{ sistema.nome_sistema }}</h3>
+                </div>
+            </li>
+
+            {% endfor %}
+            {% endif %}
+        </div>
+    </main>
+</body>
+
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suas Magias</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+    <header class="itens-header">
+        <div>
+            <div class="S-d">
+                <img src="../static/logo.png" alt="Logo do site">
+                <h1 class="logo">MAGOWIKI</h1>
+            </div>
+            <nav class="nav-links">
+                {% if 'usuario' not in session %}
+                <a href="{{ url_for('usuarios.login_usuario') }}" class="btn-entrar">Entrar</a>
+                {% else %}
+                <a href="{{ url_for('home') }}" class="btn-entrar">Home</a>
+                <a href="{{ url_for('magias.criar_magia') }}" class="btn-entrar">Criar magia</a>
+                <a href="{{ url_for('usuarios.logout') }}" class="btn-entrar">Sair</a>
+                {% endif %}
+            </nav>
+        </div>
+        <div style="display: flex; align-items: center;">
+            {% if 'usuario' not in session %}
+
+            {% else %}
+            <a href="/usuarios/perfil" class="perfil">
+                <p><strong>{{session['usuario']['nome']}}</strong></p>
+                <img src="{{session['usuario']['pfp']}}" alt="" style="border-radius: 100%; width: 65px; height: 65px;">
+            </a>
+            {% endif %}
+        </div>
+    </header>
+    <main class="main">
+        <div>
+            {% if 'usuario' in session %}
+            <h2 style="text-align: center; margin-bottom: 20px;">Magias e feitiços</h2>
+            <div class="pesquisa">
+                <form action="{{ url_for('magias.listar_suas_magias') }}">
+
+                    <label for="" style="margin-right: 5px;">Pesquisa</label>
+                    <input type="text" name="PESQUISAR" style="color: rgb(245, 235, 237);"
+                        placeholder="Insira nome da magia..." class="forms-box">
+                    <select name="SELECAO" id="" class="selecao">
+                        <option value="SISTEMA">Sistema</option>
+                        <option value="NOME">Magia</option>
+                        <option value="CLASSE">Classe</option>
+                    </select>
+                    <button type="submit" class="btn-pesq">Pesquisar</button>
+                </form>
+            </div>
+            {% if magias %}
+            {% for magia in magias %}
+            <ul class="table" style="align-items: normal;">
+                <li>
+                    <h3>{{ magia.nome_magia }}</h3>
+                    <img src="{{ magia.imagem }}" alt="imagem da magia" style="width: 200px;">
+                    <div>
+                        <p>Descrição: {{ magia.descricao }}</p>
+                        <p>Sistema: {{ magia.nome_sistema }}</p>
+                        <p>Classe: {{ magia.nome_classe }}</p>
+                        <p>Nivel para usar: {{ magia.nivel_uso }}</p>
+                        <p>Cadastrado por: {{ magia.nome }}</p>
+                        <div style="display: flex;">
+                            <a href="{{ url_for('magias.alterar_magia', id=magia.id_magia) }}"><button
+                                    class="btn-table">Editar</button></a>
+                            <a href="{{ url_for('magias.excluir_magia', id=magia.id_magia) }}"><button
+                                    class="btn-table">Excluir</button></a>
+                        </div>
+
+                    </div>
+                </li>
+            </ul>
+            {% endfor %}
+
+            {% else %}
+            <h3 style="text-align: center; margin-bottom: 20px;">Você ainda não registrou nenhuma magia</h3>
+            {% endif %}
+
+            {% else %}
+            <p>por favor, <a href="{{ url_for('usuarios.login_usuario') }}"> faça login</a> para ver todos os livros</p>
+            {% endif %}
+        </div>
+
+        <div class="pagination">
+            {% if page > 1 %}
+            <a href="{{ url_for('magias.listar_suas_magias', page=page-1) }}" class="btn-entrar">
+                < </a>
+                    {% endif %}
+
+                    {% for p in range(1, total_pages + 1) %}
+                    <a href="{{ url_for('magias.listar_suas_magias', page=p) }}"
+                        class="btn-entrar {% if p == page %}active{% endif %}">{{ p }}</a>
+                    {% endfor %}
+
+                    {% if page < total_pages %} <a href="{{ url_for('magias.listar_suas_magias', page=page+1) }}"
+                        class="btn-entrar">
+                        >
+            </a>
+            {% endif %}
+        </div>
+    </main>
+</body>
+
+</html>

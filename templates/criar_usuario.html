@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MagoWiki</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+    <header class="itens-header">
+        <div>
+            <div class="S-d">
+                <img src="../static/logo.png" alt="Logo do site">
+                <h1 class="logo">MAGOWIKI</h1>
+            </div>
+            <nav class="nav-links">
+                {% if 'usuario' not in session %}
+                <a href="{{ url_for('usuarios.login_usuario') }}" class="btn-entrar">Entrar</a>
+                {% else %}
+                <a href="{{ url_for('home') }}" class="btn-entrar">Home</a>
+                <a href="{{url_for('magias.listar_suas_magias')}}" class="btn-entrar">Minhas Magias</a>
+                <a href="#" class="btn-entrar">Todas as magias</a>
+                {% endif %}
+            </nav>
+        </div>
+    </header>
+    <main class="main" style="display: flex; align-items: center;">
+        <div class="table02">
+            <h2>Novo Usuário</h2>
+            <form action="{{ url_for('usuarios.criar_usuario') }}" method="post">
+                <div>
+                    <label for="">Email</label>
+                    <input class="forms-inputs" type="text" name="EMAIL" id="email" required>
+                </div>
+                <div>
+                    <label for="">Senha</label>
+                    <input class="forms-inputs" type="password" name="SENHA" id="senha" required>
+                </div>
+                <div>
+                    <label for="">Nome</label>
+                    <input class="forms-inputs" type="text" name="NOME" id="nome" required>
+                </div>
+                <div>
+                    <label for="">Foto de perfil</label>
+                    <input class="forms-inputs" type="text" name="PFP" id="pfp" required>
+                </div>
+
+                <button type="submit" class="btn-entrar">Cadastrar</button>
+            </form>
+        </div>
+    </main>
+</body>
+
+</html>
