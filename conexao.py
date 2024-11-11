@@ -7,7 +7,7 @@ def criar_conexao():
         user = os.getenv("POSTGRES_USER"),
         password = os.getenv("POSTGRES_PASSWORD"),
         database = os.getenv("POSTGRES_DATABASE"),
-        sslmode="required"
+        sslmode="require"
     )
 
 def fechar_conexao(conexao):
