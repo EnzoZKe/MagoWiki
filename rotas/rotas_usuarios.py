@@ -36,8 +36,6 @@ def login_usuario():
         cursor = conn.cursor(cursor_factory=RealDictCursor)
         cursor.execute("SELECT SENHA, EMAIL, NOME, PFP, USUARIO_TIPO, ID_USUARIO FROM USUARIOS WHERE EMAIL = %s", (EMAIL,))
         senhaBanco = cursor.fetchone()
-        cursor.close()
-        fechar_conexao(conn)
         
         if senhaBanco and checar_senha(senhaBanco['SENHA'], SENHA):
             session['usuario'] = {
@@ -51,6 +49,8 @@ def login_usuario():
             return redirect(url_for('home'))
         else:
             return render_template('login.html', mensagem = 'Login Incorreto')
+        # cursor.close()
+        # fechar_conexao(conn)
             
     return render_template('login.html')
 

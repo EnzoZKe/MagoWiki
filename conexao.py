@@ -9,7 +9,7 @@ def criar_conexao():
         database = os.getenv("POSTGRES_DATABASE"),
         sslmode="require"
     )
-
+    
 def fechar_conexao(conexao):
     if conexao:
         conexao.close()
