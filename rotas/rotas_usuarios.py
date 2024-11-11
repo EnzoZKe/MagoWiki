@@ -32,7 +32,6 @@ def login_usuario():
     if request.method == "POST":
         EMAIL = request.form['EMAIL']
         SENHA = request.form['SENHA']
-
         conn = criar_conexao()
         cursor = conn.cursor(cursor_factory=RealDictCursor)
         cursor.execute("SELECT SENHA, EMAIL, NOME, PFP, USUARIO_TIPO, ID_USUARIO FROM USUARIOS WHERE EMAIL = %s", (EMAIL,))
@@ -40,8 +39,7 @@ def login_usuario():
         cursor.close()
         fechar_conexao(conn)
         
-        # Verificar se senhaBanco existe e se contém a chave 'SENHA'
-        if senhaBanco and 'SENHA' in senhaBanco and checar_senha(senhaBanco['SENHA'], SENHA):
+        if senhaBanco and checar_senha(senhaBanco['SENHA'], SENHA):
             session['usuario'] = {
                 'id_usuario': senhaBanco['ID_USUARIO'],
                 'email': senhaBanco['EMAIL'],
@@ -49,9 +47,10 @@ def login_usuario():
                 'pfp': senhaBanco['PFP'],
                 'usuario_tipo': senhaBanco['USUARIO_TIPO']
             }
+            
             return redirect(url_for('home'))
         else:
-            return render_template('login.html', mensagem='Login Incorreto')
+            return render_template('login.html', mensagem = 'Login Incorreto')
             
     return render_template('login.html')
 
