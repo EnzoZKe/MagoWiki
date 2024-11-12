@@ -85,7 +85,9 @@
                             <div class="foto">
                                 <img src="{{ magia.imagem }}" alt="foto da magia" style="width: 150px; height: 150px;">
                             </div>
-
+                            {% if session['usuario']['usuario_tipo'] == 'admin' %}
+                            <a href="{{ url_for('magias.excluir_magia', id=magia.id_magia) }}"><button>Excluir</button></a>
+                            {% endif %}
                             <div>
                                 <p>Nivel para uso: {{ magia.nivel_uso }}</p>
                                 <p>Classe que pode usar: {{ magia.nome_classe }}</p>
@@ -107,9 +109,6 @@
                                                 alt="estrela" class="estrela-vazia-img">
                                             {% endif %}
                                         </button>
-                                        {% if session['usuario']['usuario_tipo'] == 'admin' %}
-                                        <a href="{{ url_for('magias.excluir_magia', id=magia.id_magia) }}"><button>Excluir</button></a>
-                                        {% endif %}
                                     </form>
                                 </div>
 
