@@ -51,10 +51,13 @@
                 <div>
                     <label for="">Selecione uma classe</label>
                     <select name="CLASSE" id="classe" class="inputs-self">
-                        <option value="{{ sistema.id_sistema }}">{{sistema.nome_sistema}}</option>
+                        {% if classe %}
+                        <option value="{{ classe.id_classe }}">{{classe.nome_classe}}</option>
+                        {% else %}
                         {% for classe in classes %}
                         <option value="{{ classe.id_classe }}">{{classe.nome_classe}}</option>
                         {% endfor %}
+                        {% endif %}
                     </select>
                 </div>
                 <div>
@@ -66,10 +69,13 @@
                 <div>
                     <label for="">Nome do sistema</label>
                     <select name="SISTEMA" id="sistema" class="inputs-self">
+                        {% if sistema %}
                         <option value="{{ sistema.id_sistema }}">{{sistema.nome_sistema}}</option>
+                        {% else %}
                         {% for sistema in sistemas %}
                         <option value="{{ sistema.id_sistema }}">{{sistema.nome_sistema}}</option>
                         {% endfor %}
+                        {% endif %}
                     </select>
                 </div>
                 <div>
