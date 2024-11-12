@@ -51,7 +51,6 @@
                 <div>
                     <label for="">Selecione uma classe</label>
                     <select name="CLASSE" id="classe" class="inputs-self">
-                        <option value="">selecione uma classe</option>
                         {% for classe in classes %}
                         <option value="{{ classe.id_classe }}">{{classe.nome_classe}}</option>
                         {% endfor %}
@@ -66,7 +65,6 @@
                 <div>
                     <label for="">Nome do sistema</label>
                     <select name="SISTEMA" id="sistema" class="inputs-self">
-                        <option value="">selecione um sistema</option>
                         {% for sistema in sistemas %}
                         <option value="{{ sistema.id_sistema }}">{{sistema.nome_sistema}}</option>
                         {% endfor %}
