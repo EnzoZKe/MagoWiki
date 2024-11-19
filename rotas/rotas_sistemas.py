@@ -1,13 +1,12 @@
 from flask import Blueprint, request, render_template, redirect, url_for, session
 from conexao import criar_conexao, fechar_conexao
-from psycopg2.extras import RealDictCursor
 
 sistemas_bp = Blueprint('sistemas', __name__)
 
 @sistemas_bp.route('/listar_sistemas', methods=['GET'])
 def listar_sistema():
     conn = criar_conexao()
-    cursor = conn.cursor(cursor_factory=RealDictCursor)
+    cursor = conn.cursor(dictionary=True)
 
     cursor.execute("""SELECT * FROM SISTEMAS""")
     
@@ -23,7 +22,7 @@ def criar_sistema():
     if 'usuario' not in session:
         return redirect(url_for('usuarios.login_usuario'))
     conn = criar_conexao()
-    cursor = conn.cursor(cursor_factory=RealDictCursor)
+    cursor = conn.cursor(dictionary=True)
 
     if request.method == 'POST':
         NOME_SISTEMA = request.form['NOME_SISTEMA'] #1
@@ -53,7 +52,7 @@ def listar_seus_sistemas():
     ID_USUARIO = session.get('usuario')['id_usuario']
     
     conn = criar_conexao()
-    cursor = conn.cursor(cursor_factory=RealDictCursor)
+    cursor = conn.cursor(dictionary=True)
 
     if not PESQUISAR:
         # Query para listar sistemas do usuário logado sem filtro de pesquisa
@@ -99,7 +98,7 @@ def excluir_sistema(id):
     
     ID_USUARIO = session.get('usuario')['id_usuario']
     conn = criar_conexao()
-    cursor = conn.cursor(cursor_factory=RealDictCursor)
+    cursor = conn.cursor(dictionary=True)
 
     cursor.execute("DELETE FROM SISTEMAS WHERE ID_SISTEMA = %s AND ID_USUARIO = %s", (id, ID_USUARIO))
 

@@ -1,6 +1,5 @@
 from flask import Blueprint, request, render_template, redirect, url_for, session
 from conexao import criar_conexao, fechar_conexao
-from psycopg2.extras import RealDictCursor
 
 classes_bp = Blueprint('classes', __name__)
 
@@ -10,7 +9,7 @@ def listar_classe():
     PESQUISAR = request.args.get('PESQUISAR', "")
 
     conn = criar_conexao()
-    cursor = conn.cursor(cursor_factory=RealDictCursor)
+    cursor = conn.cursor(dictionary=True)
 
     if not PESQUISAR:
 
@@ -31,7 +30,7 @@ def criar_classe():
     if 'usuario' not in session:
         return redirect(url_for('usuarios.login_usuario'))
     conn = criar_conexao()
-    cursor = conn.cursor(cursor_factory=RealDictCursor)
+    cursor = conn.cursor(dictionary=True)
 
     if request.method == 'POST':
         NOME_CLASSE = request.form['NOME_CLASSE'] #1
@@ -62,7 +61,7 @@ def listar_suas_classes():
     ID_USUARIO = session.get('usuario')['id_usuario']
     
     conn = criar_conexao()
-    cursor = conn.cursor(cursor_factory=RealDictCursor)
+    cursor = conn.cursor(dictionary=True)
 
     if not PESQUISAR:
         # Query para listar as classes do usuário logado sem filtro de pesquisa
@@ -115,7 +114,7 @@ def listar_suas_classes():
 @classes_bp.route('/excluir/<int:id>', methods=['GET'])
 def excluir_classe(id):
     conn = criar_conexao()
-    cursor = conn.cursor(cursor_factory=RealDictCursor)
+    cursor = conn.cursor(dictionary=True)
     ID_USUARIO = session.get('usuario')['id_usuario']
 
     cursor.execute("DELETE FROM CLASSES WHERE ID_CLASSE = %s AND ID_USUARIO =%s", (id, ID_USUARIO))
@@ -128,7 +127,7 @@ def excluir_classe(id):
 @classes_bp.route('/alterar/<int:id>', methods=['GET', 'POST'])
 def atualizar_classe(id):
     conn = criar_conexao()
-    cursor = conn.cursor(cursor_factory=RealDictCursor)
+    cursor = conn.cursor(dictionary=True)
 
     if request.method == 'POST':
         # Se o metodo for post, significa que o formulario de alteração foi submetido

@@ -1,6 +1,5 @@
 from flask import Blueprint, request, render_template, redirect, url_for, session
 from conexao import criar_conexao, fechar_conexao
-from psycopg2.extras import RealDictCursor
 
 
 magias_bp = Blueprint('magias', __name__)
@@ -20,7 +19,7 @@ def listar_magia():
     offset = (page - 1) * per_page  # Calcula o offset para a consulta SQL
 
     conn = criar_conexao()
-    cursor = conn.cursor(cursor_factory=RealDictCursor)
+    cursor = conn.cursor(dictionary=True)
 
     # Se o campo PESQUISAR estiver vazio, executa a query normal com paginação
     if not PESQUISAR:  
@@ -112,7 +111,7 @@ def criar_magia():
     if 'usuario' not in session:
         return redirect(url_for('usuarios.login_usuario'))
     conn = criar_conexao()
-    cursor = conn.cursor(cursor_factory=RealDictCursor)
+    cursor = conn.cursor(dictionary=True)
 
     if request.method == 'POST':
         NOME_MAGIA = request.form['NOME_MAGIA'] #1
@@ -161,7 +160,7 @@ def listar_suas_magias():
     
     id_usuario_logado = session['usuario']['id_usuario']
     conn = criar_conexao()
-    cursor = conn.cursor(cursor_factory=RealDictCursor)
+    cursor = conn.cursor(dictionary=True)
 
     if not PESQUISAR:
         # Query padrão para listar as magias do usuário logado sem filtro de pesquisa
@@ -237,7 +236,7 @@ def listar_suas_magias():
 @magias_bp.route('/alterar/<int:id>', methods=['GET', 'POST'])
 def alterar_magia(id):
     conn = criar_conexao()
-    cursor = conn.cursor(cursor_factory=RealDictCursor)
+    cursor = conn.cursor(dictionary=True)
 
     if request.method == 'POST':
         # Se o metodo for post, significa que o formulario de alteração foi submetido
@@ -287,7 +286,7 @@ def alterar_magia(id):
 @magias_bp.route('/excluir/<int:id>', methods=['GET'])
 def excluir_magia(id):
     conn = criar_conexao()
-    cursor = conn.cursor(cursor_factory=RealDictCursor)
+    cursor = conn.cursor(dictionary=True)
 
     cursor.execute("DELETE FROM MAGIAS WHERE ID_MAGIA = %s", (id,))
 
@@ -299,7 +298,7 @@ def excluir_magia(id):
 @magias_bp.route('/ver/<int:id>', methods=['GET'])
 def ver_magia(id):
     conn = criar_conexao()
-    cursor = conn.cursor(cursor_factory=RealDictCursor)
+    cursor = conn.cursor(dictionary=True)
 
     cursor.execute("""
     select m.*, s.nome_sistema, c.nome_classe, u.nome

@@ -1,7 +1,6 @@
 from flask import Blueprint, request, render_template, redirect, url_for, session
 from conexao import criar_conexao, fechar_conexao
 from hashlib import sha256
-from psycopg2.extras import RealDictCursor
 
 usuarios_bp = Blueprint('usuarios', __name__)
 
@@ -32,30 +31,28 @@ def login_usuario():
     if request.method == "POST":
         EMAIL = request.form['EMAIL']
         SENHA = request.form['SENHA']
+
         conn = criar_conexao()
-        cursor = conn.cursor(cursor_factory=RealDictCursor)
+        cursor = conn.cursor(dictionary=True)
         cursor.execute("SELECT SENHA, EMAIL, NOME, PFP, USUARIO_TIPO, ID_USUARIO FROM USUARIOS WHERE EMAIL = %s", (EMAIL,))
         senhaBanco = cursor.fetchone()
-
-        print(senhaBanco)
+        cursor.close()
+        fechar_conexao(conn)
         
-        if senhaBanco and checar_senha(senhaBanco['senha'], SENHA):
+        if senhaBanco and checar_senha(senhaBanco['SENHA'], SENHA):
             session['usuario'] = {
-                'id_usuario': senhaBanco['id_usuario'],
-                'email': senhaBanco['email'],
-                'nome': senhaBanco['nome'],
-                'pfp': senhaBanco['pfp'],
-                'usuario_tipo': senhaBanco['usuario_tipo']
+                'id_usuario': senhaBanco['ID_USUARIO'],
+                'email': senhaBanco['EMAIL'],
+                'nome': senhaBanco['NOME'],
+                'pfp': senhaBanco['PFP'],
+                'usuario_tipo': senhaBanco['USUARIO_TIPO']
             }
             
             return redirect(url_for('home'))
         else:
             return render_template('login.html', mensagem = 'Login Incorreto')
-        # cursor.close()
-        # fechar_conexao(conn)
             
     return render_template('login.html')
-
         
 def checar_senha(senhaBanco, senha):
     senha_convertida = sha256(senha.encode('utf-8')).hexdigest()
@@ -75,7 +72,7 @@ def perfil():
 
     # Conectando ao banco de dados
     conn = criar_conexao()
-    cursor = conn.cursor(cursor_factory=RealDictCursor)
+    cursor = conn.cursor(dictionary=True)
 
     # Consultar o número de magias cadastradas pelo usuário
     cursor.execute("SELECT COUNT(*) AS total_magias FROM MAGIAS WHERE ID_USUARIO = %s", (ID_USUARIO,))
@@ -97,7 +94,7 @@ def perfil():
 @usuarios_bp.route('/atualizarperfil', methods=['GET', 'POST'])
 def atualizar_perfil():
     conn = criar_conexao()
-    cursor = conn.cursor(cursor_factory=RealDictCursor)
+    cursor = conn.cursor(dictionary=True)
     ID_USUARIO = session.get('usuario')['id_usuario']
     
     if request.method == 'POST':
@@ -137,7 +134,32 @@ def atualizar_perfil():
 
     return render_template('atualizar_perfil.html', usuario=usuario)
 
+@usuarios_bp.route('/mostar_usuarios', methods=['GET', 'POST'])
+def mostrar_usuarios():
+    conn = criar_conexao()
+    cursor = conn.cursor(dictionary=True)
 
+    cursor.execute("""SELECT * FROM USUARIOS""")
+    usuarios = cursor.fetchall()
+
+    print(usuarios)
+
+    cursor.close()
+    fechar_conexao(conn)
+
+    return render_template('todos_usuarios.html', usuarios=usuarios)
+
+@usuarios_bp.route('/banir_usuario/<int:id>', methods=['GET', 'POST'])
+def banir_usuario(id):
+    conn = criar_conexao()
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute("DELETE FROM USUARIOS WHERE ID_USUARIO = %s", (id,))
+
+    conn.commit()
+    cursor.close()
+    fechar_conexao(conn)
+    return redirect(url_for('usuarios.mostrar_usuarios')) 
 
 @usuarios_bp.route('/atualizarsenha', methods=['GET', 'POST'])
 def atualizar_senha():
@@ -157,7 +179,7 @@ def atualizar_senha():
 
         # Verificar a senha atual
         conn = criar_conexao()
-        cursor = conn.cursor(cursor_factory=RealDictCursor)
+        cursor = conn.cursor(dictionary=True)
         cursor.execute("SELECT SENHA FROM USUARIOS WHERE ID_USUARIO = %s", (ID_USUARIO,))
         usuario = cursor.fetchone()
         

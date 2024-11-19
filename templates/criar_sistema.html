@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MagoWiki</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 
@@ -15,15 +16,52 @@
                 <img src="../static//logo.png" alt="Logo do site">
                 <h1 class="logo">MAGOWIKI</h1>
             </div>
-            <nav class="nav-links">
-                {% if 'usuario' not in session %}
-                <a href="{{ url_for('usuarios.login_usuario') }}" class="btn-entrar">Entrar</a>
-                {% else %}
-                <a href="{{ url_for('home') }}" class="btn-entrar">Home</a>
-                <a href="{{ url_for('sistemas.listar_sistema') }}" class="btn-entrar">Todos os Sistemas</a>
-                <a href="{{ url_for('sistemas.listar_seus_sistemas') }}" class="btn-entrar">Seus Sistema</a>
-                <a href="{{ url_for('sistemas.listar_seus_sistemas') }}" class="btn-entrar">Excluir Sistemas</a>
-                {% endif %}
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <div class="container-fluid">
+                    <!-- Botão de Toggle -->
+                    <button 
+                        class="navbar-toggler" 
+                        type="button" 
+                        data-bs-toggle="collapse" 
+                        data-bs-target="#navbarNav" 
+                        aria-controls="navbarNav" 
+                        aria-expanded="false" 
+                        aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+            
+                    <!-- Menu -->
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav ms-auto">
+                            {% if 'usuario' not in session %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('usuarios.login_usuario') }}">Entrar</a>
+                            </li>
+                            {% else %}                            
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('home') }}">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('favoritos.listar_favoritos') }}">Favoritos</a>
+                            </li>
+                            {% if session['usuario']['usuario_tipo'] == 'admin' %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('sistemas.listar_sistema') }}">Sistemas</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('usuarios.mostrar_usuarios') }}">Todos os Usuários</a>
+                            </li>
+                            {% endif %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('classes.listar_classe') }}">Classes</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('usuarios.logout') }}">Sair</a>
+                            </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
             </nav>
         </div>
         <div style="display: flex; align-items: center;">
@@ -31,7 +69,7 @@
 
             {% else %}
             <a href="/usuarios/perfil" class="perfil">
-                <p><strong>{{session['usuario']['nome']}}</strong></p>
+                <p id="texto"><strong>{{session['usuario']['nome']}}</strong></p>
                 <img src="{{session['usuario']['pfp']}}" alt="" style="border-radius: 100%; width: 65px; height: 65px;">
             </a>
             {% endif %}
@@ -50,6 +88,7 @@
             </form>
         </div>
     </main>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

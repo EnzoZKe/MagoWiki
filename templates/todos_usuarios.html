@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Classes</title>
+    <title>Ver usuarios</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
@@ -13,7 +13,7 @@
     <header class="itens-header">
         <div>
             <div class="S-d">
-                <img src="../static/logo.png" alt="Logo do site">
+                <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo do site">
                 <h1 class="logo">MAGOWIKI</h1>
             </div>
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -34,27 +34,12 @@
                     <div class="collapse navbar-collapse" id="navbarNav">
                         <ul class="navbar-nav ms-auto">
                             {% if 'usuario' not in session %}
-
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ url_for('usuarios.login_usuario') }}">Entrar</a>
                             </li>
                             {% else %}
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ url_for('classes.listar_classe') }}">Classes</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ url_for('classes.criar_classe') }}">Criar Classes</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ url_for('favoritos.listar_favoritos') }}">Favoritos</a>
-                            </li>
-                            {% if session['usuario']['usuario_tipo'] == 'admin' %}
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ url_for('usuarios.mostrar_usuarios') }}">Todos os Usuários</a>
-                            </li>
-                            {% endif %}
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ url_for('usuarios.logout') }}">Sair</a>
+                                <a class="nav-link" href="{{ url_for('home') }}">Home</a>
                             </li>
                             {% endif %}
                         </ul>
@@ -73,36 +58,28 @@
             {% endif %}
         </div>
     </header>
-    <main class="main">
-
-        <div class="textos">
-            {% if 'usuario' in session %}
-            <h2>Suas Classes</h2>
-            <ul class="table01">
-                {% if classes %}
-                {% for classe in classes %}
-                    <li style="display: flex; align-items: center;">
-                        <h3>{{ classe.nome_classe }}</h3> <!-- Correção: Usar 'classe' ao invés de 'classes' -->
-                        <div style="display: flex;">
-                            <a href="{{ url_for('classes.atualizar_classe', id=classe.id_classe) }}">
-                                <button class="btn-table">Editar</button>
-                            </a>
-                            <a href="{{ url_for('classes.excluir_classe', id=classe.id_classe) }}">
-                                <button class="btn-table">Excluir</button>
-                            </a>
-                        </div>
-                    </li>
-                {% endfor %}
-                {% else %}
-                <h3>Você ainda não registrou nenhuma classe</h3>
-                {% endif %}
-            
+    
+    <main class="main" style="display: flex; justify-content: center;">
+        <h1>TODOS OS USUARIOS!! - AREA DE ADM</h1>
+        {% for usuarios in usuarios %}
+        {% if usuarios.usuario_tipo != "admin" %}
+        <div class="S-d" style="justify-content: center; padding: 0;">
+            <ul>
+                <li class="table03" style="display: flex; flex-direction: row; justify-content: space-between; align-items: center;">
+                    <div>
+                        <h3>{{usuarios.nome}}</h3>
+                        <img src="{{usuarios.PFP}}" alt="">
+                    </div>
+                    {% if session['usuario']['usuario_tipo'] == 'admin' %}
+                    <a href="{{ url_for('usuarios.banir_usuario', id=usuarios.id_usuario) }}"><button>Banir</button></a>
+                    {% endif %}
+                </li>
             </ul>
-            {% else %}
-            <p>por favor, <a href="{{ url_for('usuarios.login_usuario') }}"> faça login</a> para ver os classes</p>
-            {% endif %}
         </div>
+        {% endif %}
+        {% endfor %}
     </main>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    </body>
-    </html>
+</body>
+
+</html>
