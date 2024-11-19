@@ -1,6 +1,7 @@
 from flask import Blueprint, request, render_template, redirect, url_for, session
 from conexao import criar_conexao, fechar_conexao
 from hashlib import sha256
+from psycopg2.extras import RealDictCursor
 
 usuarios_bp = Blueprint('usuarios', __name__)
 
@@ -33,7 +34,7 @@ def login_usuario():
         SENHA = request.form['SENHA']
 
         conn = criar_conexao()
-        cursor = conn.cursor(dictionary=True)
+        cursor = conn.cursor(cursor_factory=RealDictCursor)
         cursor.execute("SELECT SENHA, EMAIL, NOME, PFP, USUARIO_TIPO, ID_USUARIO FROM USUARIOS WHERE EMAIL = %s", (EMAIL,))
         senhaBanco = cursor.fetchone()
         cursor.close()
@@ -72,7 +73,7 @@ def perfil():
 
     # Conectando ao banco de dados
     conn = criar_conexao()
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
 
     # Consultar o número de magias cadastradas pelo usuário
     cursor.execute("SELECT COUNT(*) AS total_magias FROM MAGIAS WHERE ID_USUARIO = %s", (ID_USUARIO,))
@@ -94,7 +95,7 @@ def perfil():
 @usuarios_bp.route('/atualizarperfil', methods=['GET', 'POST'])
 def atualizar_perfil():
     conn = criar_conexao()
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
     ID_USUARIO = session.get('usuario')['id_usuario']
     
     if request.method == 'POST':
@@ -137,7 +138,7 @@ def atualizar_perfil():
 @usuarios_bp.route('/mostar_usuarios', methods=['GET', 'POST'])
 def mostrar_usuarios():
     conn = criar_conexao()
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
 
     cursor.execute("""SELECT * FROM USUARIOS""")
     usuarios = cursor.fetchall()
@@ -152,7 +153,7 @@ def mostrar_usuarios():
 @usuarios_bp.route('/banir_usuario/<int:id>', methods=['GET', 'POST'])
 def banir_usuario(id):
     conn = criar_conexao()
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
 
     cursor.execute("DELETE FROM USUARIOS WHERE ID_USUARIO = %s", (id,))
 
@@ -179,7 +180,7 @@ def atualizar_senha():
 
         # Verificar a senha atual
         conn = criar_conexao()
-        cursor = conn.cursor(dictionary=True)
+        cursor = conn.cursor(cursor_factory=RealDictCursor)
         cursor.execute("SELECT SENHA FROM USUARIOS WHERE ID_USUARIO = %s", (ID_USUARIO,))
         usuario = cursor.fetchone()
         
