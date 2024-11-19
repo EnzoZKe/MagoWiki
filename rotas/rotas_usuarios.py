@@ -47,6 +47,7 @@ def login_usuario():
                 'nome': senhaBanco['nome'],
                 'pfp': senhaBanco['pfp'],
                 'usuario_tipo': senhaBanco['usuario_tipo']
+                
             }
             
             return redirect(url_for('home'))
