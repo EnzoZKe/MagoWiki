@@ -69,7 +69,7 @@
         </div>
     </header>
     <main class="main" style="display: flex; align-items: center;">
-        <div class="table02">
+        <div class="table02" style="height: auto; width: auto;">
             <h2>Novo Usuário</h2>
             <form action="{{ url_for('usuarios.criar_usuario') }}" method="post">
                 <div>
@@ -86,7 +86,7 @@
                 </div>
                 <div>
                     <label for="">Foto de perfil</label>
-                    <input class="forms-inputs" type="text" name="PFP" id="pfp" required>
+                    <input class="forms-inputs" type="text" name="PFP" id="pfp">
                 </div>
 
                 <button type="submit" class="btn-entrar">Cadastrar</button>
