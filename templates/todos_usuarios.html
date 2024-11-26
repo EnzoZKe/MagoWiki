@@ -71,7 +71,7 @@
                         <img src="{{usuarios.PFP}}" alt="">
                     </div>
                     {% if session['usuario']['usuario_tipo'] == 'admin' %}
-                    <a href="{{ url_for('usuarios.banir_usuario', id=usuarios.id_usuario) }}"><button>Banir</button></a>
+                    <a href="{{ url_for('usuarios.banir_usuario', id=usuarios.id_usuario) }}"><button class="btn-banido">Banir</button></a>
                     {% endif %}
                 </li>
             </ul>
