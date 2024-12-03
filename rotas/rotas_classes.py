@@ -55,7 +55,7 @@ def listar_suas_classes():
 
     PESQUISAR = request.args.get('PESQUISAR', "")
     page = request.args.get('page', 1, type=int)
-    per_page = 5  # Número de registros por página (ajuste conforme necessário)
+    per_page = 100000  # Número de registros por página (ajuste conforme necessário)
 
     offset = (page - 1) * per_page  # Calcula o offset para a consulta SQL
     
