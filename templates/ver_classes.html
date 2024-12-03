@@ -41,18 +41,19 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ url_for('home') }}">Home</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ url_for('classes.criar_classe') }}">Criar Classe</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ url_for('classes.listar_suas_classes') }}">Suas Classes</a>
-                            </li>
+
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ url_for('favoritos.listar_favoritos') }}">Favoritos</a>
                             </li>
                             {% if session['usuario']['usuario_tipo'] == 'admin' %}
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ url_for('usuarios.mostrar_usuarios') }}">Todos os Usuários</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('classes.criar_classe') }}">Criar Classe</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('classes.listar_suas_classes') }}">Suas Classes</a>
                             </li>
                             {% endif %}
                             <li class="nav-item">
