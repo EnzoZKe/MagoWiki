@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Jaro:opsz@6..72&family=Protest+Revolution&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Protest+Revolution&display=swap');
+
 * {
     margin: 0;
     max-height: 2880px;
@@ -17,8 +20,10 @@ a {
 
 body {
     background-color: rgb(245, 235, 237);
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-
+    font-family: "Jaro", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
 }
 
 
@@ -27,6 +32,9 @@ body {
     flex-direction: column;
     align-self: center;
     color: rgb(72, 145, 161);
+    font-family: "Protest Revolution", serif;
+    font-weight: 400;
+    font-style: normal;
 }
 
 img {
